@@ -3,10 +3,12 @@
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage{graphicx}
 \author{Isaac B Goss}
-\title{Lab 11: Register Files}
-\subtitle{Performed March 7 - 21}
+\title{Lab 11: Register Files\\Performed March 7 - 21}
 \begin{document}
-    \maketitle
+	\begin{titlepage}
+	    \maketitle
+	\end{titlepage}
+
     \section{Purpose}
         The purpose of this lab is to implement a simple circuit using a 4x4 register file, and test it using seven-segment displays.
         %Registers are basic components of any computer system, used as temporary storage.
@@ -18,79 +20,77 @@
     
         \begin{figure}[h]
         	\centering
-        	\includegraphics[width=0.3\textwidth]{design1}
+        	\includegraphics[width=0.8\textwidth]{design1}
         \end{figure}
         
         As instructed, this specification was first tested in software, using Quartus II.
         Above, you can see our design, which consists of two 2-bit counters which choose the read and write locations of our register file.
-        You see our 4-bit input, bussed to both the write_data input of our register file, and directly into a decoder.
+        You see our 4-bit input, bussed to both the write data input of our register file, and directly into a decoder.
         This decoder then feeds into a seven segment display in order to see what we are writing to memory.
-        Likewise, the read_data output of the register file is fed into another decoder, and into yet another seven-segment display, so that it is possible to see what is \textit{read} from memory.
+        Likewise, the read data output of the register file is fed into another decoder, and into yet another seven-segment display, so that it is possible to see what is \textit{read} from memory.
         
         For simulation purposes, however, the seven-segments were removed, as you can see in the next figure.  Their inputs were bussed directly into two output terminals for easier reading. 
         The details of this simulation will be discussed in the \textit{Results} section.
         
         \begin{figure}[h]
         	\centering
-        	\includegraphics[width=0.3\textwidth]{design2}
+        	\includegraphics[width=0.8\textwidth]{design2}
         \end{figure}
         
-        Then came bread-board implementation.  The following picture illustrates how our build was arranged.
+        Then came bread-board implementation.  The picture at the end of this report illustrates how our build was arranged.
         On the left, you see two SPDT (???) switches, each acting as the UP inputs to the counters similarly described in the Quartus design.
         Looking down, we have an 8-bit block of SPST toggles, which act as the 4-bit input from before.
-        This, unsurprisingly, is fed both into the write_data input of our 4x4 reg file (middle board), and into another decoder (middle, lower).
-        The read_data output of the reg file is fed into a decoder (middle, second from bottom), and both these decoders output to their respective seven-segments (right).
-        Top right you see one more switch, which is debounced and fed into write_enable in our reg file.
+        This, unsurprisingly, is fed both into the write data input of our 4x4 reg file (middle board), and into another decoder (middle, lower).
+        The read data output of the reg file is fed into a decoder (middle, second from bottom), and both these decoders output to their respective seven-segments (right).
+        Top right you see one more switch, which is de-bounced and fed into write enable in our reg file.
         
-        \begin{figure}[h]
-        	\centering
-        	\includegraphics[width=0.3\textwidth]{breadboard}
-        \end{figure}
+        
         
         The last step was measuring our circuit's performance with Logic Analyzer.  As before, this test will be described in \textit{Results}.  
         Our testing method is worth mentioning, however.
-        Our test was a 30-second caputure, wherein we wrote four numbers to memory, and then read them out.  
-        This was a four-handed procedure, where I managed write and read adresses and write_enable, and my partner changed the number to be written to memory with each ``cycle''.
+        Our test was a 30-second capture, wherein we wrote four numbers to memory, and then read them out.  
+        This was a four-handed procedure, where I managed write and read addresses and write enable, and my partner changed the number to be written to memory with each ``cycle''.
         
         
     \section{Results}
     
         \begin{figure}[h]
         	\centering
-        	\includegraphics[width=0.3\textwidth]{simulation}
+        	\includegraphics[width=\textwidth]{simulation}
         \end{figure}
     
-        Above, one can see our Quartus simulation.  The top bit, ``Address_in'', represents the UP input to our write counter.
-        That is, with each rising edge, the next adress was being written in our reg file.
+        Above, one can see our Quartus simulation.  The top bit, ``Address\_in'', represents the UP input to our write counter.
+        That is, with each rising edge, the next address was being written in our reg file.
         The next, similarly, represent a change in the read location from our reg file.
-        The following group captures the input bits, which initilize at 8, hold 8 through one clock cycle (Adress_in cycle), and then change to 4 and then 2 with each cycle.
+        The following group captures the input bits, which initialize at 8, hold 8 through one clock cycle (Address\_in cycle), and then change to 4 and then 2 with each cycle.
         
-        Following this, the output of the decoder is presented, named ``LED_IN''.  This decoder gives us a one-cold representation of the input bus, the bits directly above.  This representation, of course, is fed directly into a seven-segment display.
+        Following this, the output of the decoder is presented, named ``LED\_IN''.  This decoder gives us a one-cold representation of the input bus, the bits directly above.  This representation, of course, is fed directly into a seven-segment display.
         
-        The next section, labled ``LED_OUT'', 
+        The next section, labeled ``LED\_OUT'', 
         which is a similar representation of the data currently being read from memory, ready for seven-segment display.
         Finally, we have ``REGO'', short for ``register out''.  This is the base-2 representation of the data being read from memory.
         Notice that these two track together, as they are simply different representations of the same data.
-        Also, they remain unchanged until later in the expirement.  This is true because ``Addsress_out'' was static until this time.  That is, the address read from memory remained unchanged, so although more data was written in other areas of memory, the data read remained the same.
+        Also, they remain unchanged until later in the experiment.  This is true because ``Address\_out'' was static until this time.  That is, the address read from memory remained unchanged, so although more data was written in other areas of memory, the data read remained the same.
         
         \begin{figure}[h]
         	\centering
-        	\includegraphics[width=0.3\textwidth]{testing}
+        	\includegraphics[width=\textwidth]{testing}
         \end{figure}
         
-        This figure shows the Logic Analyzer reading ouf our physical build.
+        This figure shows the Logic Analyzer reading of our physical build.
         These bits are labeled both by their pin position, and function to the circuit.  This table describes their meaning, and the corresponding bit in the Quartus diagram.
         
-        \begin{tabular}[llc | r]
+        \begin{tabular}{llc | r}
             Pin input & Pin Name & Quartus Pin & Function \\
-            D0 & W0 & Address_in & write address \\
-            D1 & W1 & Address_in & write address \\
+            \hline
+            D0 & W0 & Address\_in & write address \\
+            D1 & W1 & Address\_in & write address \\
             D2 & IN0 & IN[1] & write data \\
             D3 & IN1 & IN[2] & write data \\
             D4 & IN2 & IN[3] & write data \\
             D5 & IN3 & IN[4] & write data \\
-            D6 & R0 & Addsress_out & read address \\
-            D7 & R1 & Addsress_out & read address \\
+            D6 & R0 & Address\_out & read address \\
+            D7 & R1 & Address\_out & read address \\
             D8 & OUT0 & REGO[1] & read data \\
             D9 & OUT1 & REGO[2] & read data \\
             D10 & OUT2 & REGO[3] & read data \\
@@ -100,14 +100,26 @@
         
         The reader may notice the extra time at the beginning and end of the timing diagram.
         This uneventful space exists due to our capture mechanism, described in \textit{Procedure}.
-        The most obvious ommision from the previous Quartus simulation is the output of the decoders.
+        The most obvious omission from the previous Quartus simulation is the output of the decoders.
         The reason that these are missing is that in choosing what physical pins to insert into our build, it was found that base-2 encoding requires fewer pins, and is more easily readable, than one-cold encoding.
         This has the effect of minimizing the overall size of our timing diagram while displaying the same information.
         
-    \section{Conclusion}
+        
+    \section{Conclusions}
+        
+        In short, implementing a design with a register file was a relatively simple process, largely a matter of putting together the puzzle pieces earlier discovered.
+        Our design performed as expected, both in soft and hard formats.
+        
+        
+        
         
     \section{References}
+        Aaron Marko was my lab partner.
         
+    \begin{figure}[h]
+    	\centering
+    	\includegraphics[width=0.8\textwidth]{breadboard}
+    \end{figure}
     
 \end{document}
 
